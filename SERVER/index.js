@@ -126,6 +126,7 @@ function verifyJWT(req, res, next) {
   const token = req.headers["x-access-token"]?.split(' ')[1]
 
   if (token) {
+      //token verifying
       jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
           if (err) return res.json({
               isLoggedIn: false, 
@@ -173,6 +174,7 @@ app.post("/api/login", (req, res) => {
           if (!dbUser) {
               return res.json({message: "Invalid Email or Password"})
           }
+          //bcrypt checking password
           bcrypt.compare(userLoggingIn.password, dbUser.password)
           .then(isCorrect => {
               if (isCorrect) {
@@ -308,14 +310,20 @@ app.put('/api/:id/apply', verifyJWT, upload.single('regimage'),async (req,res) =
             gender, 
             approvedstatus:"pending"
         }
+        const regex1= /^\d{10}$/g;
+        if(!regex1.test(req.body.phone)){
+            res.json({message: "Invalid Phone Number"})
+        }else{
         Users.findOneAndUpdate(filter, update,{new: true})
         .then(()=>{
             res.json({message: "Success"})
-        })}else{
+        })}}else{
             res.json(message = "User can only perform this Action.")
     }
 
 })
+
+//getstatus
 
 app.get('/api/:id/getroleandstatus', verifyJWT, (req,res)=>{
     const id=  req.params.id;
@@ -511,7 +519,7 @@ app.get('/api/:id/generate-pdf', verifyJWT, (req, res) => {
     doc.end();
   
     }else{
-        message: "NOT AUTHORIZED"
+        res.json(message= "Not Authorized")
     }}) 
 });
 
@@ -560,7 +568,7 @@ app.post("/api/newbm", upload.single('image'), verifyJWT, async(req,res)=>{
             res.json({message: "Success"})
         }
     }else{
-        message: "Admin can only perform this action"
+        res.json(message= "Not an Admin")
     }
   })
 
@@ -578,7 +586,7 @@ app.delete('/api/deleteabm', verifyJWT, (req,res)=>{
         res.json(batch)
     })
     }else{
-        message: "Admin can only perform this action"
+        res.json(message= "Not an Admin")
     }
 })
 
@@ -598,7 +606,7 @@ app.put('/api/:id/updatebm', verifyJWT, (req,res) => {
         res.json(batch)
     })
     }else{
-    message: "Admin can only perform this action"
+        res.json(message= "Not an Admin")
     }
     })
 
@@ -621,7 +629,7 @@ app.put('/api/addcourse',verifyJWT,(req,res)=>{
         })
     }
     else{
-        message: "Not an Admin"
+        res.json(message= "Not an Admin")
     }
     })
 
@@ -639,7 +647,7 @@ app.put('/api/addbatch',verifyJWT, (req,res)=>{
         })
     }
     else{
-        message: "Not an Admin"
+        res.json(message= "Not an Admin")
     }
     })
 
@@ -658,7 +666,7 @@ app.post('/api/delbatch',verifyJWT, (req,res)=>{
         })
     }
     else{
-        message: "Not an Admin"
+        res.json(message= "Not an Admin")
     }
     })
 
@@ -677,7 +685,7 @@ app.post('/api/delcourse',verifyJWT, (req,res)=>{
         })
     }
     else{
-        message: "Not an Admin"
+        res.json(message= "Not an Admin")
     }
     })
 
