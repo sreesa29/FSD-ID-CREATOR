@@ -45,13 +45,15 @@
   font-size: 20px;
   padding: 8px;
   font-weight: 400;
-  color: aliceblue;
+  color: gainsboro;
+  height: 25px;
 }
 .h3detil {
   font-family: "Share Tech", sans-serif;
   color: aliceblue;
   font-size: 29px;
   padding: 8px;
+  font-weight: normal;
 }
 
 .right {

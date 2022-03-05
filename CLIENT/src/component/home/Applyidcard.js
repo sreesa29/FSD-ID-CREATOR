@@ -125,7 +125,7 @@ function Applyidcard(props) {
                 <div className='input-box'>  
                 <span className='details'>ID Card Image</span>  
                 <input type="file" accept=".png, .jpg, .jpeg" name="regimage" required/>
-                <label className="applylabel">Accepted formats .png,.jpg/jpeg)</label>
+                <label className="applylabel">Accepted file formats are .png,.jpg/jpeg (best dimension is 100w*125h in px)</label>
                 </div>
 
                 

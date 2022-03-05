@@ -39,7 +39,7 @@ function Navbuttons(props) {
             {
                 userDetails.role==="user"? 
                 <>
-<FaSignOutAlt  style={{fontSize:"25px", color:"white", float:"right", cursor:"pointer"}} alt="Sign Out" onClick={logout}/>
+<FaSignOutAlt  style={{fontSize:"25px", color:"gray", float:"right", cursor:"pointer"}} alt="Sign Out" onClick={logout}/>
                  <br/>
                  <Button variant="contained"><Link to={`/userhome`} style={{textDecoration:"none", color:"white" }}>Home</Link></Button> 
                   { userDetails.approvedstatus === "rejected" || userDetails.approvedstatus === "approved" || userDetails.approvedstatus === "pending" 
