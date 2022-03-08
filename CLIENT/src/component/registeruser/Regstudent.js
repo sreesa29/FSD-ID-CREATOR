@@ -2,7 +2,6 @@ import { useLayoutEffect, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import Coursedropdown from '../home/Coursedropdown';
 import ValidationError from '../login/ValidationError'
-import "./regstud.css"
 
 function Regstudent () {
 

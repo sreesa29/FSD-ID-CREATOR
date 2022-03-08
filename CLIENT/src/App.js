@@ -9,6 +9,7 @@ import Login from './component/login/Login';
 import Idstatus from './component/registeruser/Idstatus';
 import Regstudent from './component/registeruser/Regstudent';
 import Pdfmaker from './component/registeruser/Pdfmaker';
+import Formcontrol from './component/admin/Formcontrol';
 
 
 function App() {
@@ -27,6 +28,8 @@ function App() {
         <Route path="/Coursedropdown" element={<Coursedropdown />} />
         <Route path="/:id/idstatus" element={<Idstatus/>} />
         <Route path="/:id/pdf" element={<Pdfmaker/>} />
+        <Route path="/admin/formcontol" element={<Formcontrol/>} />
+
 
         {/* <Route path="*" element={<Error />} /> */}
       </Routes>

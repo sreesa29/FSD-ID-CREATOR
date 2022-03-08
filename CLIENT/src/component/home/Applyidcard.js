@@ -6,6 +6,7 @@ import Coursedropdown from './Coursedropdown';
 import Navbuttons from './Navbuttons';
 import "./applycard.css";
 
+
 function Applyidcard(props) {
     const {id} = useParams();
     const [getrolestatus,setGetrolestatus] = useState([]);

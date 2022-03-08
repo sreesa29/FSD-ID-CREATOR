@@ -9,6 +9,8 @@ const { v4: uuidv4 } = require('uuid');
 const dotenv = require("dotenv").config();
 let path = require('path');
 var pdfmake = require('pdfmake');
+const nodemailer = require("nodemailer");
+
 
 
 const app = express(); 
@@ -243,6 +245,30 @@ app.get("/userdetails", verifyJWT, (req, res) => {
 }
 
     })
+
+
+//admindetails
+
+app.get("/admindetails", verifyJWT, (req, res) => {
+    if(req.user.role==="admin"){
+     res.json({
+        id: req.user.id,
+        email: req.user.email,
+        designation: req.user.designation,
+        name:req.user.name,
+        gender:req.user.gender,
+        role: req.user.role,
+        course: req.user.course,
+        image: req.user.image,
+        approvedstatus:req.user.approvedstatus
+
+})}else{
+    res.json(message="Not authorized")
+}
+
+    })
+
+
 
 
 
@@ -534,6 +560,52 @@ app.get('/api/:id/generate-pdf', verifyJWT, (req, res) => {
 
 //ADMIN CRUD OPERATIONS
 
+////////////////nodemail setups///////////////
+
+// Googleapis
+const { google } = require("googleapis");
+// Pull out OAuth from googleapis
+const OAuth2 = google.auth.OAuth2;
+const createTransporter = async () => {
+    //Connect to the oauth playground
+    const oauth2Client = new OAuth2(
+      process.env.OAUTH_CLIENT_ID,
+      process.env.OAUTH_CLIENT_SECRET,
+      "https://developers.google.com/oauthplayground"
+    );
+  
+    // Add the refresh token to the Oauth2 connection
+    oauth2Client.setCredentials({
+      refresh_token: process.env.OAUTH_REFRESH_TOKEN,
+    });
+  
+    const accessToken = await new Promise((resolve, reject) => {
+      oauth2Client.getAccessToken((err, token) => {
+        if (err) {
+          reject("Failed to create access token : error message(" + err);
+        }
+        resolve(token);
+      });
+    });
+
+     // Authenticating and creating a method to send a mail
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      type: "OAuth2",
+      user: process.env.SENDER_EMAIL,
+      accessToken,
+      clientId: process.env.OAUTH_CLIENT_ID,
+      clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+    },
+  });
+
+  return transporter;
+};
+
+
+
 //newBM
 
 app.post("/api/newbm", upload.single('image'), verifyJWT, async(req,res)=>{
@@ -550,7 +622,7 @@ app.post("/api/newbm", upload.single('image'), verifyJWT, async(req,res)=>{
             res.json ({message:"Email is invalid"});
         }
         else{
-            user.password = await bcrypt.hash(req.body.password, 10)
+            user.password = await bcrypt.hash(`ICTAK123@${req.body.phone}`, 10)
             const dbUser =  new Users({
                 email: user.email.toLowerCase(),
                 phone: user.phone,
@@ -561,18 +633,68 @@ app.post("/api/newbm", upload.single('image'), verifyJWT, async(req,res)=>{
                 course:user.course,
                 image: req.file.filename,
                 designation:user.designation,
-                role: "bm",
-  
-            })
-            dbUser.save()
-            res.json({message: "Success"})
+                role: "bm",})
+
+      const recipient = user.email;
+      const mailSubject = "ICTAK ID CARD Generator-Login Credentials-reg.";
+      const mailBody = 
+      
+    `Dear ${req.body.name},
+    
+     Welcome to ID Card Generator!
+
+     We have created a login credentials for you!
+     _____________________________
+
+     Login ID: ${user.email}
+     Password: ICTAK123@${req.body.phone}
+     _____________________________
+
+////////////////////////////////////////////////////////////
+    
+This is a system generated mail. Please do not reply to this e-mail address. If you have any concerns about this mail, kindly contact your system administrator.
+
+////////////////////////////////////////////////////////////
+
+
+    Administrator,
+    ICTAK
+    `;
+
+
+      // Mail options
+      let mailOptions = {
+        from: process.env.SENDER_EMAIL,
+        to: recipient,
+        subject: mailSubject,
+        text: mailBody,
+      };
+      try {
+      let emailTransporter = await createTransporter();
+      emailTransporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          // failed block
+          console.log(error);
+        } else {
+          // Success block
+          console.log("Email sent: " + info.response);
         }
+      });
+    } catch (error) {
+        return console.log(error);
+      }
+      dbUser.save()
+      res.json({message: "Success"})
+
+        }
+
+
     }else{
         res.json(message= "Not an Admin")
     }
   })
 
-
+///ENDS BM CREATION AND MAIL
 
 
 //deleteaBM
