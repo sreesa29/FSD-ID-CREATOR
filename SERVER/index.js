@@ -576,7 +576,7 @@ const createTransporter = async () => {
   
     // Add the refresh token to the Oauth2 connection
     oauth2Client.setCredentials({
-      refresh_token: process.env.OAUTH_REFRESH_TOKEN,
+      refresh_token: process.env.OAUTH_REFRESH_TOKEN
     });
   
     const accessToken = await new Promise((resolve, reject) => {
@@ -598,6 +598,9 @@ const createTransporter = async () => {
       clientId: process.env.OAUTH_CLIENT_ID,
       clientSecret: process.env.OAUTH_CLIENT_SECRET,
       refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+      tls:{
+          rejectUnauthorized: false
+      }
     },
   });
 
@@ -824,26 +827,6 @@ app.get('/api/batchcourse',(req,res) => {
 
 
 //ADMIN FORM CONTROL ENDS
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
