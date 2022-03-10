@@ -46,9 +46,10 @@ function Login() {
 
     return (
         <>
-        <div className="login-main">
+        <div className="login-main" style={{backgroundImage: `url(${process.env.PUBLIC_URL}/assests/bg23.png)`}}>
         <div className="login-mai">
-            <div className="loginlabel">ICTAK ID Generator</div>
+            <img src={`${process.env.PUBLIC_URL}/assests/logotak.png`} alt='logo' width="130px" align="right"></img>
+            <br/><br/><div className="loginlabel">Login here</div>
             <form onSubmit={(e) => handleLogin(e)}>
              <input placeholder="email" className="usernamelog" type="text" name="email" id="email" />
              <br />

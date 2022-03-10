@@ -69,6 +69,7 @@ function Applyidcard(props) {
         <Navbuttons />
         </Box>
         <div className='body1'>
+        
         <div className="container">
             <div className="title">Apply Your ID card here</div>
             <div className="content">
