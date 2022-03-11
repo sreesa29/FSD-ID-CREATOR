@@ -832,6 +832,74 @@ app.get('/api/batchcourse',(req,res) => {
 
 
 
+
+
+//ATHIRA CODE
+
+app.post("/api/forgetpwd",async(req, res) => {
+    
+    const userLoggingIn = req.body;
+    if (!userLoggingIn) return res.json({message: "Server Error"})
+
+     const emailfind = Users.findOne({email: userLoggingIn.email.toLowerCase()},{email:1})
+    
+
+         if (!dbUser) {
+              return res.json({message: "Invalid Email"})
+         }
+
+         else if(userLoggingIn.name == dbUser.name)
+         {  
+            const password1 = await bcrypt.hash('ICTAK@123', 10) 
+            const filter = {email: userLoggingIn.email};
+            const{password} = dbUser.password;
+            const update = { password1   }
+            Users.findOneAndUpdate(filter, update,{new: true})
+            .then(()=>{
+                res.json({message: "Success"})
+            })
+                 
+         }
+
+         else if(userLoggingIn.name != dbUser.name)
+         {
+            
+         return res.json({message: "Name doen't match with given email"})
+         }   
+})
+
+
+//ATHIRA CODE ENDS HERE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const port = process.env.PORT || 8000; 
 
 
